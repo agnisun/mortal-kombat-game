@@ -1,11 +1,13 @@
+import { PushBox } from '@constants/fighter-constants'
+import { Camera } from '@entities/camera/camera'
+import { FighterState } from '@ts/enums/fighter-enums'
+import { FrameDelay } from '@ts/enums/frame-enums'
+import { PlayerId } from '@ts/types'
 import { Fighter } from './fighter'
-import { PlayerId } from '../types'
-import { FighterState, FrameDelay, PushBox } from '@constants/figther'
-import { Camera } from '../camera'
 
 export class Raiden extends Fighter {
     constructor(playerId: PlayerId) {
-        super('Raiden', playerId)
+        super(playerId)
         const image = document.querySelector('img[alt="raiden"]') as HTMLImageElement
         this.image = image
         this.frames = new Map([

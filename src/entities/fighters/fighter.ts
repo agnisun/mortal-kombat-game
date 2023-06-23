@@ -1,22 +1,15 @@
-import { FrameTime, Position, InitialVelocity, VelocityX, PlayerId, FighterPushBox } from '../types'
-import { FIGHTER_START, FighterDirection, FighterState, FrameDelay, PUSH_FRICTION } from '@constants/figther'
-import { STAGE_FLOOR, STAGE_MID_POINT, STAGE_PADDING } from '@constants/stage'
+import { FIGHTER_START, PUSH_FRICTION } from '@constants/fighter-constants'
+import { STAGE_MID_POINT, STAGE_PADDING, STAGE_FLOOR } from '@constants/stage-constants'
+import { Camera } from '@entities/camera/camera'
+import { FighterState, FighterDirection } from '@ts/enums/fighter-enums'
+import { FrameDelay } from '@ts/enums/frame-enums'
+import { Position, PlayerId } from '@ts/types'
+import { InitialVelocity, FighterStates, FighterAnimations, FighterPushBox, VelocityX } from '@ts/types/fighter-types'
+import { FrameTime } from '@ts/types/frame-types'
 import { rectsOverlap } from '@utils/collisions'
-import * as control from '../input-register'
-import { Camera } from '../camera'
-
-type FighterAnimations = Record<FighterState, [string, number][]>
-type FighterStates = Record<
-    FighterState,
-    {
-        init?: () => void
-        update?: (context: CanvasRenderingContext2D, time: FrameTime) => void
-        validFrom: (FighterState | undefined)[]
-    }
->
+import * as control from '@handlers/input-register'
 
 export abstract class Fighter {
-    name: string
     image: HTMLImageElement
     position: Position
     velocity: Position
@@ -33,10 +26,9 @@ export abstract class Fighter {
     opponent!: Fighter
     pushbox: FighterPushBox
 
-    protected constructor(name: string, playerId: PlayerId) {
+    protected constructor(playerId: PlayerId) {
         this.playerId = playerId
         this.image = new Image()
-        this.name = name
         this.position = { x: STAGE_MID_POINT + STAGE_PADDING + (playerId === 0 ? -FIGHTER_START : FIGHTER_START), y: STAGE_FLOOR }
         this.direction = playerId === 0 ? FighterDirection.RIGHT : FighterDirection.LEFT
         this.velocity = {

@@ -1,6 +1,6 @@
+import { Camera } from '@entities/camera/camera'
+import { FrameTime } from '@ts/types/frame-types'
 import { drawFrame } from '@utils/context'
-import { Camera } from '../camera'
-import { FrameTime } from '../types'
 
 export class Stage {
     image: HTMLImageElement

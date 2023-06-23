@@ -18,6 +18,9 @@ export default defineConfig({
       '@constants': resolve(__dirname, 'src/constants/'),
       '@assets': resolve(__dirname, 'src/assets/'),
       '@utils': resolve(__dirname, 'src/utils/'),
+      '@states': resolve(__dirname, 'src/states/'),
+      '@ts': resolve(__dirname, 'src/ts/'),
+      '@handlers': resolve(__dirname, 'src/handlers/'),
     }
   },
 })

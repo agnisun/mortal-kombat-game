@@ -1,26 +1,32 @@
-import { TIME_DELAY } from '@constants/battle'
-import { FighterDirection } from '@constants/figther'
-import { Fighter } from '@entities/fighter'
+import { TIME_DELAY } from '@constants/battle-constants'
+import { HEALTH_MAX } from '@constants/fighter-constants'
+import { gameState } from '@states/game-state'
+import { FighterDirection, FighterId } from '@ts/enums/fighter-enums'
+import { FrameTime } from '@ts/types/frame-types'
 import { drawFrame } from '@utils/context'
-import { FrameTime } from 'types'
 
 export class StatusBar {
     image: HTMLImageElement
     time: number
     timeTimer: number
-    fighters: Fighter[]
     frames: Map<string, number[]>
     names: string[]
+    healthPoints: Map<FighterId, number>
 
-    constructor(fighters: Fighter[]) {
+    constructor() {
         const image = document.querySelector('img[alt="misc"]') as HTMLImageElement
         this.image = image
-        this.time = 5
+        this.time = 99
         this.timeTimer = 0
-        this.fighters = fighters
+        this.healthPoints = new Map([
+            [gameState.fighters[0].id, gameState.fighters[0].healthPoints],
+            [gameState.fighters[1].id, gameState.fighters[1].healthPoints],
+        ])
 
         this.frames = new Map([
             ['health-bar', [5406, 49, 163, 12]],
+            ['health-damage-bar', [5407, 64, 135, 10]],
+            ['round-score', [5406, 79, 11, 16]],
 
             ['raiden-wins', [3816, 126, 118, 18]],
             ['raiden-tag', [934, 1026, 45, 11]],
@@ -40,16 +46,26 @@ export class StatusBar {
             ['time-9', [5851, 34, 8, 16]],
         ])
 
-        const [{ name: name1 }, { name: name2 }] = this.fighters
-        this.names = [`${name1.toLocaleLowerCase()}-tag`, `${name2.toLocaleLowerCase()}-tag`]
+        this.names = gameState.fighters.map(({ id }) => `${id}-tag`)
     }
 
     drawFrame(context: CanvasRenderingContext2D, frameKey: string, x: number, y: number, direction: FighterDirection = 1, width?: number, height?: number) {
         drawFrame(context, this.image, this.frames.get(frameKey) as number[], x, y, direction, width, height)
     }
 
-    update(context: CanvasRenderingContext2D, time: FrameTime) {
+    update(_context: CanvasRenderingContext2D, time: FrameTime) {
         this.updateTime(time)
+        this.updateHealthBar(time)
+    }
+
+    updateHealthBar(time: FrameTime) {
+        for (const figther of gameState.fighters) {
+            const uiHealthPoints = this.healthPoints.get(figther.id) as number
+
+            if (figther.healthPoints < uiHealthPoints) {
+                this.healthPoints.set(figther.id, Math.max(0, uiHealthPoints - time.secondsPassed * 60))
+            }
+        }
     }
 
     updateTime(time: FrameTime) {
@@ -60,8 +76,23 @@ export class StatusBar {
     }
 
     drawHealthBars(context: CanvasRenderingContext2D) {
-        this.drawFrame(context, 'health-bar', 5, 16, 1, 135, 10)
-        this.drawFrame(context, 'health-bar', context.canvas.width - 5, 16, -1, 135, 10)
+        const figthers = Array.from(this.healthPoints.values())
+
+        this.drawFrame(context, 'health-bar', 5, 16, 1, 137, 10)
+        this.drawFrame(context, 'health-damage-bar', 6, 17, 1, HEALTH_MAX - figthers[0], 8)
+
+        this.drawFrame(context, 'health-bar', context.canvas.width - 5, 16, -1, 137, 10)
+        this.drawFrame(context, 'health-damage-bar', context.canvas.width - 6, 17, -1, HEALTH_MAX - figthers[1], 8)
+    }
+
+    drawRoundScores(context: CanvasRenderingContext2D) {
+        for (let i = 0; i < gameState.fighters[0].rounds; i++) {
+            this.drawFrame(context, 'round-score', (i + 1) * 10 - 5, 25)
+        }
+
+        for (let i = 0; i < gameState.fighters[1].rounds; i++) {
+            this.drawFrame(context, 'round-score', context.canvas.width - 5 - (i + 1) * 10, 25)
+        }
     }
 
     drawTimer(context: CanvasRenderingContext2D) {
@@ -79,6 +110,7 @@ export class StatusBar {
 
     draw(context: CanvasRenderingContext2D) {
         this.drawHealthBars(context)
+        this.drawRoundScores(context)
         this.drawTimer(context)
         this.drawNameTags(context)
     }

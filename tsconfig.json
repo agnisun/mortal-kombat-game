@@ -22,6 +22,9 @@
       "@constants/*": ["./constants/*"],
       "@assets/*": ["./assets/*"],
       "@utils/*": ["./utils/*"],
+      "@states/*": ["./states/*"],
+      "@ts/*": ["./ts/*"],
+      "@handlers/*": ["./handlers/*"],
     }
   },
   "include": ["src"],

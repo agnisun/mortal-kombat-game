@@ -1,5 +1,6 @@
-import { Conrol, controls } from '@constants/control'
-import { FighterDirection } from '@constants/figther'
+import { controls } from '@constants/control-constants'
+import { Control } from '@ts/enums/control-enums'
+import { FighterDirection } from '@ts/enums/fighter-enums'
 
 const heldKeys = new Set<string>()
 
@@ -26,10 +27,10 @@ export function registerKeyboardEvents() {
 const isKeyDown = (code: string) => heldKeys.has(code)
 export const isKeyUp = (code: string) => !heldKeys.has(code)
 
-const isLeft = (id: number) => isKeyDown(controls[id].keyboard[Conrol.LEFT])
-const isRight = (id: number) => isKeyDown(controls[id].keyboard[Conrol.RIGHT])
-export const isUp = (id: number) => isKeyDown(controls[id].keyboard[Conrol.UP])
-export const isDown = (id: number) => isKeyDown(controls[id].keyboard[Conrol.DOWN])
+const isLeft = (id: number) => isKeyDown(controls[id].keyboard[Control.LEFT])
+const isRight = (id: number) => isKeyDown(controls[id].keyboard[Control.RIGHT])
+export const isUp = (id: number) => isKeyDown(controls[id].keyboard[Control.UP])
+export const isDown = (id: number) => isKeyDown(controls[id].keyboard[Control.DOWN])
 
 export const isForward = (id: number, direction: FighterDirection) => (direction === FighterDirection.RIGHT ? isRight(id) : isLeft(id))
 export const isBackward = (id: number, direction: FighterDirection) => (direction === FighterDirection.LEFT ? isRight(id) : isLeft(id))
