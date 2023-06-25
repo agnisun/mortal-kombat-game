@@ -6,6 +6,7 @@ export const PushBox = {
     JUMP: [-16, -55, 32, 55],
     JUMP_UP: [-16, -80, 32, 80],
     CROUCH: [-16, -60, 32, 60],
+    PUNCH: [-5, -92, 32, 90],
 }
 
 export const HEALTH_MAX = 135

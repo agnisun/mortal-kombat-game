@@ -3,6 +3,11 @@ export enum FighterDirection {
     RIGHT = 1,
 }
 
+export enum FighterAttack {
+    PUNCH = 'punch',
+    KICK = 'kick',
+}
+
 export enum FighterState {
     IDLE = 'idle',
     IDLE_TURN = 'idleTurn',
@@ -18,6 +23,9 @@ export enum FighterState {
     CROUCH_UP = 'crouchUp',
     CROUCH_DOWN = 'crouchDown',
     CROUCH_TURN = 'crouchTurn',
+    LIGHT_PUNCH = 'lightPunch',
+    LIGHT_KICK = 'lightKick',
+    MEDIUM_KICK = 'mediumKick',
 }
 
 export enum FighterId {

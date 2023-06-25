@@ -1,4 +1,4 @@
-import { FighterState } from '@ts/enums/fighter-enums'
+import { FighterAttack, FighterState } from '@ts/enums/fighter-enums'
 import { FrameTime } from './frame-types'
 import { Raiden } from '@entities/fighters/raiden'
 import { LiuKang } from '@entities/fighters/liu-kang'
@@ -8,6 +8,7 @@ export type FighterAnimations = Record<FighterState, [string, number][]>
 export type FighterStates = Record<
     FighterState,
     {
+        attackType?: FighterAttack
         init?: () => void
         update?: (context: CanvasRenderingContext2D, time: FrameTime) => void
         validFrom: (FighterState | undefined)[]
@@ -28,4 +29,10 @@ export interface InitialVelocity {
         [key in VelocityX]: number
     }
     jump: number
+}
+
+export interface FighterBoxes {
+    push: FighterPushBox
+    hurt: number[][]
+    hit: FighterPushBox
 }
