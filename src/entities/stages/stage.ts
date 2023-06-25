@@ -1,5 +1,5 @@
 import { Camera } from '@entities/camera/camera'
-import { FrameTime } from '@ts/types/frame-types'
+import { FrameTime } from '@ts/types/frame'
 import { drawFrame } from '@utils/context'
 import { BackgroundAnimation } from './shared/background-animation'
 

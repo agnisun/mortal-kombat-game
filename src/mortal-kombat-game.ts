@@ -1,12 +1,12 @@
 import '@assets/styles/style.css'
 import { Stage } from '@entities/stages/stage'
-import { STAGE_MID_POINT, STAGE_PADDING } from '@constants/stage-constants'
+import { STAGE_MID_POINT, STAGE_PADDING } from '@constants/stage'
 import { StatusBar } from '@entities/overlays/status-bar'
 import { Camera } from '@entities/camera/camera'
 import { getContext } from '@utils/context'
 import { gameState } from '@states/game-state'
-import { FrameTime } from '@ts/types/frame-types'
-import { FighterHero } from '@ts/types/fighter-types'
+import { FrameTime } from '@ts/types/frame'
+import { FighterHero } from '@ts/types/fighter'
 
 export class MortalKombatGame {
     entities: [Stage, FighterHero, FighterHero, StatusBar]

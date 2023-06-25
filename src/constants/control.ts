@@ -1,5 +1,5 @@
-import { Control } from '@ts/enums/control-enums'
-import { ControlHandler } from '@ts/types/control-types'
+import { Control } from '@ts/enums/control'
+import { ControlHandler } from '@ts/types/control'
 
 export const controls: ControlHandler[] = [
     {

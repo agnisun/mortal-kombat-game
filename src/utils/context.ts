@@ -1,4 +1,4 @@
-import { FighterDirection } from '@ts/enums/fighter-enums'
+import { FighterDirection } from '@ts/enums/fighter'
 
 export function getContext() {
     const canvas = document.getElementById('canvas') as HTMLCanvasElement

@@ -1,5 +1,5 @@
-import { FighterAttack, FighterState } from '@ts/enums/fighter-enums'
-import { FrameTime } from './frame-types'
+import { FighterAttack, FighterState } from '@ts/enums/fighter'
+import { FrameTime } from './frame'
 import { Raiden } from '@entities/fighters/raiden'
 import { LiuKang } from '@entities/fighters/liu-kang'
 

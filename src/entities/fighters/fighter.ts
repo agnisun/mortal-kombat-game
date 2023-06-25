@@ -1,14 +1,14 @@
-import { FIGHTER_START, PUSH_FRICTION } from '@constants/fighter-constants'
-import { STAGE_MID_POINT, STAGE_PADDING, STAGE_FLOOR } from '@constants/stage-constants'
+import { FIGHTER_START, PUSH_FRICTION } from '@constants/fighter'
+import { STAGE_MID_POINT, STAGE_PADDING, STAGE_FLOOR } from '@constants/stage'
 import { Camera } from '@entities/camera/camera'
-import { FighterState, FighterDirection, FighterAttack, FighterId } from '@ts/enums/fighter-enums'
-import { FrameDelay } from '@ts/enums/frame-enums'
+import { FighterState, FighterDirection, FighterAttack, FighterId } from '@ts/enums/fighter'
+import { FrameDelay } from '@ts/enums/frame'
 import { Position, PlayerId } from '@ts/types'
-import { InitialVelocity, FighterStates, FighterAnimations, VelocityX, FighterBoxes } from '@ts/types/fighter-types'
-import { FrameTime } from '@ts/types/frame-types'
+import { InitialVelocity, FighterStates, FighterAnimations, VelocityX, FighterBoxes } from '@ts/types/fighter'
+import { FrameTime } from '@ts/types/frame'
 import { boxOverlap, getActualBoxDimensions, rectsOverlap } from '@utils/collisions'
 import * as control from '@handlers/input-register'
-import { FRAME_TIME } from '@constants/game-constants'
+import { FRAME_TIME } from '@constants/game'
 
 export abstract class Fighter {
     image: HTMLImageElement

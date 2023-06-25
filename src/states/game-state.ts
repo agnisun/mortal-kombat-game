@@ -1,6 +1,6 @@
-import { GameState } from '@ts/types/game-types'
+import { GameState } from '@ts/types/game'
 import { createDefaultFighterState } from './fighter-state'
-import { FighterId } from '@ts/enums/fighter-enums'
+import { FighterId } from '@ts/enums/fighter'
 import { PlayerId } from '@ts/types'
 
 const fighter1 = createDefaultFighterState(FighterId.RAIDEN, PlayerId.FIRST)

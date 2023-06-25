@@ -1,7 +1,7 @@
-import { HEALTH_MAX } from '@constants/fighter-constants'
-import { FighterId } from '@ts/enums/fighter-enums'
+import { HEALTH_MAX } from '@constants/fighter'
+import { FighterId } from '@ts/enums/fighter'
 import { PlayerId } from '@ts/types'
-import { FighterHero } from '@ts/types/fighter-types'
+import { FighterHero } from '@ts/types/fighter'
 import { createFighter } from '@utils/create-fighter'
 
 export interface FighterGameState {

@@ -1,8 +1,8 @@
-import { TIME_DELAY } from '@constants/battle-constants'
-import { HEALTH_MAX } from '@constants/fighter-constants'
+import { TIME_DELAY } from '@constants/battle'
+import { HEALTH_MAX } from '@constants/fighter'
 import { gameState } from '@states/game-state'
-import { FighterDirection, FighterId } from '@ts/enums/fighter-enums'
-import { FrameTime } from '@ts/types/frame-types'
+import { FighterDirection, FighterId } from '@ts/enums/fighter'
+import { FrameTime } from '@ts/types/frame'
 import { drawFrame } from '@utils/context'
 
 export class StatusBar {

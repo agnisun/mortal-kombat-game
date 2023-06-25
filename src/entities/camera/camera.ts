@@ -1,7 +1,7 @@
-import { SCROLL_BOUNDARY, STAGE_PADDING, STAGE_WIDTH, STAGE_HEIGHT } from '@constants/stage-constants'
+import { SCROLL_BOUNDARY, STAGE_PADDING, STAGE_WIDTH, STAGE_HEIGHT } from '@constants/stage'
 import { gameState } from '@states/game-state'
 import { Position } from '@ts/types'
-import { FrameTime } from '@ts/types/frame-types'
+import { FrameTime } from '@ts/types/frame'
 
 export class Camera {
     position: Position

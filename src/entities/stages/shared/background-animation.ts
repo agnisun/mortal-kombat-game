@@ -1,4 +1,4 @@
-import { FrameTime } from '@ts/types/frame-types'
+import { FrameTime } from '@ts/types/frame'
 
 export class BackgroundAnimation {
     image: HTMLImageElement

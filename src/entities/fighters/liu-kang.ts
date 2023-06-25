@@ -1,7 +1,7 @@
-import { PushBox } from '@constants/fighter-constants'
+import { PushBox } from '@constants/fighter'
 import { Camera } from '@entities/camera/camera'
-import { FighterId, FighterState } from '@ts/enums/fighter-enums'
-import { FrameDelay } from '@ts/enums/frame-enums'
+import { FighterId, FighterState } from '@ts/enums/fighter'
+import { FrameDelay } from '@ts/enums/frame'
 import { PlayerId } from '@ts/types'
 import { Fighter } from './fighter'
 

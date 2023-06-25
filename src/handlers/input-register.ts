@@ -1,6 +1,6 @@
-import { controls } from '@constants/control-constants'
-import { Control } from '@ts/enums/control-enums'
-import { FighterDirection } from '@ts/enums/fighter-enums'
+import { controls } from '@constants/control'
+import { Control } from '@ts/enums/control'
+import { FighterDirection } from '@ts/enums/fighter'
 
 const heldKeys = new Set<string>()
 const pressedKeys = new Set<string>()
