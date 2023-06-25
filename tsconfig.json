@@ -25,6 +25,7 @@
       "@states/*": ["./states/*"],
       "@ts/*": ["./ts/*"],
       "@handlers/*": ["./handlers/*"],
+      "@scenes/*": ["./scenes/*"],
     }
   },
   "include": ["src"],

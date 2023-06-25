@@ -1,4 +1,4 @@
-import { FighterAttack, FighterState } from '@ts/enums/fighter'
+import { FighterAttack, FighterAttackStrength, FighterState } from '@ts/enums/fighter'
 import { FrameTime } from './frame'
 import { Raiden } from '@entities/fighters/raiden'
 import { LiuKang } from '@entities/fighters/liu-kang'
@@ -9,6 +9,7 @@ export type FighterStates = Record<
     FighterState,
     {
         attackType?: FighterAttack
+        attackStrength?: FighterAttackStrength
         init?: () => void
         update?: (context: CanvasRenderingContext2D, time: FrameTime) => void
         validFrom: (FighterState | undefined)[]

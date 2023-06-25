@@ -3,7 +3,7 @@ import { FrameTime } from '@ts/types/frame'
 import { drawFrame } from '@utils/context'
 import { BackgroundAnimation } from './shared/background-animation'
 
-export class Stage {
+export class CourtyardStage {
     image: HTMLImageElement
     frames: Map<string, number[]>
     monks: BackgroundAnimation
@@ -40,7 +40,7 @@ export class Stage {
         )
     }
 
-    update(_context: CanvasRenderingContext2D, time: FrameTime) {
+    update(time: FrameTime) {
         this.monks.update(time)
     }
 
@@ -56,7 +56,7 @@ export class Stage {
         this.drawFrame(context, 'throne', Math.floor(489 - camera.position.x), 13 - camera.position.y)
         this.drawFrame(context, 'platform', Math.floor(397 - camera.position.x), 90 - camera.position.y)
         this.drawFrame(context, 'floor', Math.floor(192 - camera.position.x), 159 - camera.position.y)
-        this.monks.draw(context, 310 - camera.position.x, 145 - camera.position.y)
+        this.monks.draw(context, 405 - camera.position.x, 145 - camera.position.y)
         this.drawFrame(context, 'guards', Math.floor(365 - camera.position.x), 113 - camera.position.y)
     }
 }

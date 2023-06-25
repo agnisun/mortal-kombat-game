@@ -21,6 +21,7 @@ export default defineConfig({
       '@states': resolve(__dirname, 'src/states/'),
       '@ts': resolve(__dirname, 'src/ts/'),
       '@handlers': resolve(__dirname, 'src/handlers/'),
+      '@scenes': resolve(__dirname, 'src/scenes/'),
     }
   },
 })

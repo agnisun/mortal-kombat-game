@@ -1,3 +1,5 @@
+import { FighterAttackStrength } from '@ts/enums/fighter'
+
 export const PUSH_FRICTION = 66
 export const FIGHTER_START = 90
 
@@ -10,3 +12,12 @@ export const PushBox = {
 }
 
 export const HEALTH_MAX = 135
+
+export const FighterAttackBaseData = {
+    [FighterAttackStrength.LIGHT]: {
+        damage: 12,
+    },
+    [FighterAttackStrength.MEDIUM]: {
+        damage: 20,
+    },
+}

@@ -1,13 +1,13 @@
 import { PushBox } from '@constants/fighter'
 import { Camera } from '@entities/camera/camera'
-import { FighterId, FighterState } from '@ts/enums/fighter'
+import { FighterAttackStrength, FighterId, FighterState } from '@ts/enums/fighter'
 import { FrameDelay } from '@ts/enums/frame'
 import { PlayerId } from '@ts/types'
 import { Fighter } from './fighter'
 
 export class LiuKang extends Fighter {
-    constructor(playerId: PlayerId) {
-        super(playerId)
+    constructor(playerId: PlayerId, onAttackHit: (opponentId: PlayerId, strength: FighterAttackStrength) => void) {
+        super(playerId, onAttackHit)
         const image = document.querySelector('img[alt="liu-kang"]') as HTMLImageElement
         this.image = image
         this.name = FighterId['LIU-KANG']

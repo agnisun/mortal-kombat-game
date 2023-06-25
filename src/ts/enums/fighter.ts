@@ -8,6 +8,11 @@ export enum FighterAttack {
     KICK = 'kick',
 }
 
+export enum FighterAttackStrength {
+    LIGHT = 'light',
+    MEDIUM = 'medium',
+}
+
 export enum FighterState {
     IDLE = 'idle',
     IDLE_TURN = 'idleTurn',

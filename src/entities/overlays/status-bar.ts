@@ -7,45 +7,39 @@ import { drawFrame } from '@utils/context'
 
 export class StatusBar {
     image: HTMLImageElement
-    time: number
-    timeTimer: number
-    frames: Map<string, number[]>
+    time = 99
+    timeTimer = 0
+    frames: Map<string, number[]> = new Map([
+        ['health-bar', [5406, 49, 163, 12]],
+        ['health-damage-bar', [5407, 64, 135, 10]],
+        ['round-score', [5406, 79, 11, 16]],
+
+        ['raiden-wins', [3816, 126, 118, 18]],
+        ['raiden-tag', [934, 1026, 45, 11]],
+
+        ['liu-kang-wins', [3807, 178, 139, 18]],
+        ['liu-kang-tag', [1000, 1026, 59, 11]],
+
+        ['time-0', [5756, 34, 8, 16]],
+        ['time-1', [5766, 34, 9, 16]],
+        ['time-2', [5777, 34, 9, 16]],
+        ['time-3', [5788, 34, 9, 16]],
+        ['time-4', [5799, 34, 8, 16]],
+        ['time-5', [5809, 34, 9, 16]],
+        ['time-6', [5820, 34, 8, 16]],
+        ['time-7', [5830, 34, 8, 16]],
+        ['time-8', [5840, 34, 9, 16]],
+        ['time-9', [5851, 34, 8, 16]],
+    ])
     names: string[]
-    healthPoints: Map<FighterId, number>
+    healthPoints: Map<FighterId, number> = new Map([
+        [gameState.fighters[0].id, gameState.fighters[0].healthPoints],
+        [gameState.fighters[1].id, gameState.fighters[1].healthPoints],
+    ])
 
     constructor() {
         const image = document.querySelector('img[alt="misc"]') as HTMLImageElement
         this.image = image
-        this.time = 99
-        this.timeTimer = 0
-        this.healthPoints = new Map([
-            [gameState.fighters[0].id, gameState.fighters[0].healthPoints],
-            [gameState.fighters[1].id, gameState.fighters[1].healthPoints],
-        ])
-
-        this.frames = new Map([
-            ['health-bar', [5406, 49, 163, 12]],
-            ['health-damage-bar', [5407, 64, 135, 10]],
-            ['round-score', [5406, 79, 11, 16]],
-
-            ['raiden-wins', [3816, 126, 118, 18]],
-            ['raiden-tag', [934, 1026, 45, 11]],
-
-            ['liu-kang-wins', [3807, 178, 139, 18]],
-            ['liu-kang-tag', [1000, 1026, 59, 11]],
-
-            ['time-0', [5756, 34, 8, 16]],
-            ['time-1', [5766, 34, 9, 16]],
-            ['time-2', [5777, 34, 9, 16]],
-            ['time-3', [5788, 34, 9, 16]],
-            ['time-4', [5799, 34, 8, 16]],
-            ['time-5', [5809, 34, 9, 16]],
-            ['time-6', [5820, 34, 8, 16]],
-            ['time-7', [5830, 34, 8, 16]],
-            ['time-8', [5840, 34, 9, 16]],
-            ['time-9', [5851, 34, 8, 16]],
-        ])
-
         this.names = gameState.fighters.map(({ id }) => `${id}-tag`)
     }
 
@@ -78,10 +72,10 @@ export class StatusBar {
     drawHealthBars(context: CanvasRenderingContext2D) {
         const figthers = Array.from(this.healthPoints.values())
 
-        this.drawFrame(context, 'health-bar', 5, 16, 1, 137, 10)
+        this.drawFrame(context, 'health-bar', 5, 16, 1, HEALTH_MAX + 2, 10)
         this.drawFrame(context, 'health-damage-bar', 6, 17, 1, HEALTH_MAX - figthers[0], 8)
 
-        this.drawFrame(context, 'health-bar', context.canvas.width - 5, 16, -1, 137, 10)
+        this.drawFrame(context, 'health-bar', context.canvas.width - 5, 16, -1, HEALTH_MAX + 2, 10)
         this.drawFrame(context, 'health-damage-bar', context.canvas.width - 6, 17, -1, HEALTH_MAX - figthers[1], 8)
     }
 
