@@ -11,7 +11,7 @@ export type FighterStates = Record<
         attackType?: FighterAttack
         attackStrength?: FighterAttackStrength
         init?: () => void
-        update?: (context: CanvasRenderingContext2D, time: FrameTime) => void
+        update?: (time: FrameTime) => void
         validFrom: (FighterState | undefined)[]
     }
 >
@@ -34,6 +34,8 @@ export interface InitialVelocity {
 
 export interface FighterBoxes {
     push: FighterPushBox
-    hurt: number[][]
+    hurt: {
+        [key: string]: number[]
+    }
     hit: FighterPushBox
 }

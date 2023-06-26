@@ -31,6 +31,14 @@ export enum FighterState {
     LIGHT_PUNCH = 'lightPunch',
     LIGHT_KICK = 'lightKick',
     MEDIUM_KICK = 'mediumKick',
+    HURT_HEAD_LIGHT = 'hurtHeadLight',
+    HURT_BODY_LIGHT = 'hurtBodyLight',
+}
+
+export enum FighterHurtBox {
+    HEAD = 'head',
+    BODY = 'body',
+    FEET = 'feet',
 }
 
 export enum FighterId {

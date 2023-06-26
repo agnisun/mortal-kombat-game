@@ -6,7 +6,7 @@ import { PlayerId } from '@ts/types'
 import { Fighter } from './fighter'
 
 export class Raiden extends Fighter {
-    constructor(playerId: PlayerId, onAttackHit: (opponentId: PlayerId, strength: FighterAttackStrength) => void) {
+    constructor(playerId: PlayerId, onAttackHit: (playerId: PlayerId, opponentId: PlayerId, strength: FighterAttackStrength) => void) {
         super(playerId, onAttackHit)
         const image = document.querySelector('img[alt="raiden"]') as HTMLImageElement
         this.image = image
@@ -19,8 +19,8 @@ export class Raiden extends Fighter {
                     [23, 98],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -32,8 +32,8 @@ export class Raiden extends Fighter {
                     [20, 99],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -45,8 +45,8 @@ export class Raiden extends Fighter {
                     [20, 100],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -58,8 +58,8 @@ export class Raiden extends Fighter {
                     [20, 99],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -71,8 +71,8 @@ export class Raiden extends Fighter {
                     [20, 98],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -84,8 +84,8 @@ export class Raiden extends Fighter {
                     [23, 100],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -97,8 +97,8 @@ export class Raiden extends Fighter {
                     [20, 101],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -110,8 +110,8 @@ export class Raiden extends Fighter {
                     [20, 101],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -123,8 +123,8 @@ export class Raiden extends Fighter {
                     [20, 98],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -137,8 +137,8 @@ export class Raiden extends Fighter {
                     [23, 99],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -150,8 +150,8 @@ export class Raiden extends Fighter {
                     [23, 99],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -163,8 +163,8 @@ export class Raiden extends Fighter {
                     [23, 99],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -176,8 +176,8 @@ export class Raiden extends Fighter {
                     [23, 99],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -189,8 +189,8 @@ export class Raiden extends Fighter {
                     [23, 99],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -202,8 +202,8 @@ export class Raiden extends Fighter {
                     [23, 99],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -215,8 +215,8 @@ export class Raiden extends Fighter {
                     [23, 99],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -228,8 +228,8 @@ export class Raiden extends Fighter {
                     [23, 99],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -242,8 +242,8 @@ export class Raiden extends Fighter {
                     [24, 100],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -255,8 +255,8 @@ export class Raiden extends Fighter {
                     [24, 101],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -268,8 +268,8 @@ export class Raiden extends Fighter {
                     [24, 100],
                     PushBox.IDLE,
                     [
-                        [-13, -101, 19, 18],
-                        [-21, -84, 40, 45],
+                        [-13, -95, 19, 18],
+                        [-21, -77, 40, 38],
                         [-21, -38, 40, 40],
                     ],
                 ],
@@ -663,6 +663,85 @@ export class Raiden extends Fighter {
                     ],
                 ],
             ],
+
+            [
+                'hurt-head-light-1',
+                [
+                    [79, 761, 51, 99],
+                    [25, 96],
+                    PushBox.IDLE,
+                    [
+                        [-23, -96, 17, 19],
+                        [-23, -77, 34, 40],
+                        [-20, -37, 40, 40],
+                    ],
+                ],
+            ],
+            [
+                'hurt-head-light-2',
+                [
+                    [142, 765, 54, 95],
+                    [27, 92],
+                    PushBox.IDLE,
+                    [
+                        [-30, -96, 17, 19],
+                        [-23, -77, 34, 40],
+                        [-20, -37, 40, 40],
+                    ],
+                ],
+            ],
+            [
+                'hurt-head-light-3',
+                [
+                    [208, 766, 59, 94],
+                    [29, 91],
+                    PushBox.IDLE,
+                    [
+                        [-30, -96, 17, 19],
+                        [-23, -77, 34, 40],
+                        [-20, -37, 40, 40],
+                    ],
+                ],
+            ],
+            [
+                'hurt-body-light-1',
+                [
+                    [312, 762, 48, 98],
+                    [24, 95],
+                    PushBox.IDLE,
+                    [
+                        [-20, -92, 17, 10],
+                        [-15, -82, 26, 52],
+                        [-20, -30, 40, 30],
+                    ],
+                ],
+            ],
+            [
+                'hurt-body-light-2',
+                [
+                    [371, 763, 51, 97],
+                    [25, 94],
+                    PushBox.IDLE,
+                    [
+                        [-25, -92, 17, 15],
+                        [-25, -76, 30, 43],
+                        [-20, -33, 40, 30],
+                    ],
+                ],
+            ],
+            [
+                'hurt-body-light-3',
+                [
+                    [432, 767, 56, 93],
+                    [28, 90],
+                    PushBox.IDLE,
+                    [
+                        [-25, -92, 17, 15],
+                        [-25, -76, 30, 43],
+                        [-20, -33, 40, 30],
+                    ],
+                ],
+            ],
         ])
 
         this.animations[FighterState.IDLE] = [
@@ -790,6 +869,19 @@ export class Raiden extends Fighter {
             ['medium-kick-7', 5],
             ['medium-kick-8', 5],
             ['medium-kick-8', FrameDelay.TRANSITION],
+        ]
+
+        this.animations[FighterState.HURT_HEAD_LIGHT] = [
+            ['hurt-head-light-1', 4],
+            ['hurt-head-light-2', 4],
+            ['hurt-head-light-3', 4],
+            ['hurt-head-light-3', FrameDelay.TRANSITION],
+        ]
+        this.animations[FighterState.HURT_BODY_LIGHT] = [
+            ['hurt-body-light-1', 4],
+            ['hurt-body-light-2', 4],
+            ['hurt-body-light-3', 4],
+            ['hurt-body-light-3', FrameDelay.TRANSITION],
         ]
     }
 

@@ -4,40 +4,38 @@ import { drawFrame } from '@utils/context'
 import { BackgroundAnimation } from './shared/background-animation'
 
 export class CourtyardStage {
-    image: HTMLImageElement
-    frames: Map<string, number[]>
-    monks: BackgroundAnimation
+    image = document.querySelector('img[alt="courtyard"]') as HTMLImageElement
+    frames: Map<string, number[]> = new Map([
+        ['platform', [227, 952, 640, 104]],
+        ['throne', [320, 588, 447, 126]],
+        ['throne-decoration', [414, 357, 259, 83]],
+        ['floor', [10, 1726, 1033, 98]],
+        ['guards', [188, 1391, 693, 116]],
+    ])
+    monks: BackgroundAnimation = new BackgroundAnimation(
+        this.image,
+        [
+            ['monks-1', [1344, 38, 625, 41]],
+            ['monks-2', [1344, 174, 625, 40]],
+            ['monks-3', [1344, 311, 625, 40]],
+            ['monks-4', [1344, 446, 625, 41]],
+            ['monks-5', [1344, 582, 625, 41]],
+            ['monks-6', [1344, 718, 625, 41]],
+        ],
+        [
+            ['monks-1', 144],
+            ['monks-2', 144],
+            ['monks-3', 144],
+            ['monks-4', 144],
+            ['monks-5', 144],
+            ['monks-6', 144],
+        ]
+    )
+    music = document.querySelector('audio#theme-courtyard') as HTMLAudioElement
 
     constructor() {
-        const image = document.querySelector('img[alt="courtyard"]') as HTMLImageElement
-
-        this.image = image
-        this.frames = new Map([
-            ['platform', [227, 952, 640, 104]],
-            ['throne', [320, 588, 447, 126]],
-            ['throne-decoration', [414, 357, 259, 83]],
-            ['floor', [10, 1726, 1033, 98]],
-            ['guards', [188, 1391, 693, 116]],
-        ])
-        this.monks = new BackgroundAnimation(
-            this.image,
-            [
-                ['monks-1', [1344, 38, 625, 41]],
-                ['monks-2', [1344, 174, 625, 40]],
-                ['monks-3', [1344, 311, 625, 40]],
-                ['monks-4', [1344, 446, 625, 41]],
-                ['monks-5', [1344, 582, 625, 41]],
-                ['monks-6', [1344, 718, 625, 41]],
-            ],
-            [
-                ['monks-1', 144],
-                ['monks-2', 144],
-                ['monks-3', 144],
-                ['monks-4', 144],
-                ['monks-5', 144],
-                ['monks-6', 144],
-            ]
-        )
+        this.music.volume = 0.2
+        this.music.play()
     }
 
     update(time: FrameTime) {

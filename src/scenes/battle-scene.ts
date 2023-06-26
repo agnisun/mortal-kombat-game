@@ -17,6 +17,7 @@ export class BattleScene {
     camera!: Camera
     stage: CourtyardStage
     overlays: [StatusBar]
+    fighterDrawOrder = [0, 1]
 
     constructor() {
         this.stage = new CourtyardStage()
@@ -51,9 +52,10 @@ export class BattleScene {
         return fighterEntities
     }
 
-    handleAttackHit(opponentId: PlayerId, strength: FighterAttackStrength) {
+    handleAttackHit(playerId: PlayerId, opponentId: PlayerId, strength: FighterAttackStrength) {
         const newHealth = gameState.fighters[opponentId].healthPoints - FighterAttackBaseData[strength].damage
         gameState.fighters[opponentId].healthPoints = Math.max(0, newHealth)
+        this.fighterDrawOrder = [playerId, opponentId]
     }
 
     startRound() {
@@ -81,8 +83,8 @@ export class BattleScene {
     }
 
     drawFighters(context: CanvasRenderingContext2D) {
-        for (const fighter of this.fighters) {
-            fighter.draw(context, this.camera)
+        for (const fighterId of this.fighterDrawOrder) {
+            this.fighters[fighterId].draw(context, this.camera)
         }
     }
 

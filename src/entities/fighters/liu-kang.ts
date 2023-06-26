@@ -6,7 +6,7 @@ import { PlayerId } from '@ts/types'
 import { Fighter } from './fighter'
 
 export class LiuKang extends Fighter {
-    constructor(playerId: PlayerId, onAttackHit: (opponentId: PlayerId, strength: FighterAttackStrength) => void) {
+    constructor(playerId: PlayerId, onAttackHit: (playerId: PlayerId, opponentId: PlayerId, strength: FighterAttackStrength) => void) {
         super(playerId, onAttackHit)
         const image = document.querySelector('img[alt="liu-kang"]') as HTMLImageElement
         this.image = image
@@ -513,7 +513,7 @@ export class LiuKang extends Fighter {
                         [0, -84, 30, 45],
                         [-15, -38, 40, 40],
                     ],
-                    [25, -84, 28, 13],
+                    [25, -90, 28, 13],
                 ],
             ],
 
@@ -580,7 +580,7 @@ export class LiuKang extends Fighter {
                         [-15, -85, 23, 45],
                         [-10, -40, 15, 40],
                     ],
-                    [20, -84, 28, 13],
+                    [23, -84, 28, 13],
                 ],
             ],
 
@@ -623,7 +623,7 @@ export class LiuKang extends Fighter {
                     ],
                 ],
             ],
-            ['medium-kick-4', [[196, 615, 57, 99], [23, 96], PushBox.IDLE, [[], [-20, -75, 30, 37], [-10, -37, 15, 38]], [10, -99, 28, 13]]],
+            ['medium-kick-4', [[196, 615, 57, 99], [23, 96], PushBox.IDLE, [[], [-20, -75, 30, 37], [-10, -37, 15, 38]], [15, -99, 30, 13]]],
             [
                 'medium-kick-5',
                 [
@@ -660,6 +660,85 @@ export class LiuKang extends Fighter {
                         [-10, -97, 16, 16],
                         [-10, -81, 25, 45],
                         [-10, -37, 30, 38],
+                    ],
+                ],
+            ],
+
+            [
+                'hurt-head-light-1',
+                [
+                    [18, 860, 43, 102],
+                    [21, 99],
+                    PushBox.IDLE,
+                    [
+                        [-12, -99, 17, 20],
+                        [-15, -78, 26, 48],
+                        [-20, -30, 40, 30],
+                    ],
+                ],
+            ],
+            [
+                'hurt-head-light-2',
+                [
+                    [71, 862, 44, 102],
+                    [22, 99],
+                    PushBox.IDLE,
+                    [
+                        [-12, -99, 17, 20],
+                        [-15, -78, 26, 48],
+                        [-20, -30, 40, 30],
+                    ],
+                ],
+            ],
+            [
+                'hurt-head-light-3',
+                [
+                    [125, 870, 43, 94],
+                    [21, 91],
+                    PushBox.IDLE,
+                    [
+                        [-20, -92, 17, 10],
+                        [-15, -82, 26, 52],
+                        [-20, -30, 40, 30],
+                    ],
+                ],
+            ],
+            [
+                'hurt-body-light-1',
+                [
+                    [217, 865, 46, 99],
+                    [23, 96],
+                    PushBox.IDLE,
+                    [
+                        [-7, -95, 17, 15],
+                        [-15, -80, 26, 52],
+                        [-20, -28, 40, 30],
+                    ],
+                ],
+            ],
+            [
+                'hurt-body-light-2',
+                [
+                    [273, 866, 49, 98],
+                    [25, 95],
+                    PushBox.IDLE,
+                    [
+                        [-13, -95, 17, 15],
+                        [-13, -80, 26, 52],
+                        [-13, -30, 40, 30],
+                    ],
+                ],
+            ],
+            [
+                'hurt-body-light-3',
+                [
+                    [333, 868, 50, 96],
+                    [18, 97],
+                    PushBox.IDLE,
+                    [
+                        [-11, -95, 17, 15],
+                        [-7, -80, 26, 52],
+                        [-10, -30, 40, 30],
                     ],
                 ],
             ],
@@ -789,6 +868,18 @@ export class LiuKang extends Fighter {
             ['medium-kick-6', 7],
             ['medium-kick-7', 7],
             ['medium-kick-7', FrameDelay.TRANSITION],
+        ]
+        this.animations[FighterState.HURT_HEAD_LIGHT] = [
+            ['hurt-head-light-1', 6],
+            ['hurt-head-light-2', 6],
+            ['hurt-head-light-3', 6],
+            ['hurt-head-light-3', FrameDelay.TRANSITION],
+        ]
+        this.animations[FighterState.HURT_BODY_LIGHT] = [
+            ['hurt-body-light-1', 6],
+            ['hurt-body-light-2', 6],
+            ['hurt-body-light-3', 6],
+            ['hurt-body-light-3', FrameDelay.TRANSITION],
         ]
     }
 

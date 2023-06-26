@@ -1,7 +1,7 @@
-import { FIGHTER_START, PUSH_FRICTION } from '@constants/fighter'
+import { FIGHTER_START, PUSH_FRICTION, hurtStateValidFrom } from '@constants/fighter'
 import { STAGE_MID_POINT, STAGE_PADDING, STAGE_FLOOR } from '@constants/stage'
 import { Camera } from '@entities/camera/camera'
-import { FighterState, FighterDirection, FighterAttack, FighterId, FighterAttackStrength } from '@ts/enums/fighter'
+import { FighterState, FighterDirection, FighterAttack, FighterId, FighterAttackStrength, FighterHurtBox } from '@ts/enums/fighter'
 import { FrameDelay } from '@ts/enums/frame'
 import { Position, PlayerId } from '@ts/types'
 import { InitialVelocity, FighterStates, FighterAnimations, VelocityX, FighterBoxes } from '@ts/types/fighter'
@@ -51,6 +51,8 @@ export abstract class Fighter {
                 FighterState.LIGHT_PUNCH,
                 FighterState.LIGHT_KICK,
                 FighterState.MEDIUM_KICK,
+                FighterState.HURT_HEAD_LIGHT,
+                FighterState.HURT_BODY_LIGHT,
             ],
         },
         [FighterState.IDLE_TURN]: {
@@ -131,10 +133,20 @@ export abstract class Fighter {
         },
         [FighterState.MEDIUM_KICK]: {
             attackType: FighterAttack.KICK,
-            attackStrength: FighterAttackStrength.MEDIUM,
+            attackStrength: FighterAttackStrength.LIGHT,
             init: this.handleStandartMediumAttackInit.bind(this),
             update: this.handleMediumKickState.bind(this),
             validFrom: [FighterState.IDLE, FighterState.WALK_FORWARDS, FighterState.WALK_BACKWARDS],
+        },
+        [FighterState.HURT_HEAD_LIGHT]: {
+            init: this.handleHurtInit.bind(this),
+            update: this.handleHurtState.bind(this),
+            validFrom: hurtStateValidFrom,
+        },
+        [FighterState.HURT_BODY_LIGHT]: {
+            init: this.handleHurtInit.bind(this),
+            update: this.handleHurtState.bind(this),
+            validFrom: hurtStateValidFrom,
         },
     }
     animations: FighterAnimations = {
@@ -155,6 +167,8 @@ export abstract class Fighter {
         lightKick: [],
         lightPunch: [],
         mediumKick: [],
+        hurtHeadLight: [],
+        hurtBodyLight: [],
     }
     direction: FighterDirection
     playerId: PlayerId
@@ -166,11 +180,11 @@ export abstract class Fighter {
             width: 0,
             height: 0,
         },
-        hurt: [
-            [0, 0, 0, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0],
-        ],
+        hurt: {
+            [FighterHurtBox.HEAD]: [0, 0, 0, 0],
+            [FighterHurtBox.BODY]: [0, 0, 0, 0],
+            [FighterHurtBox.FEET]: [0, 0, 0, 0],
+        },
         hit: {
             x: 0,
             y: 0,
@@ -179,22 +193,32 @@ export abstract class Fighter {
         },
     }
     attackStroke = false
-    onAttackHit: (opponentId: PlayerId, strength: FighterAttackStrength) => void
+    onAttackHit: (player: PlayerId, opponentId: PlayerId, strength: FighterAttackStrength) => void
 
-    protected constructor(playerId: PlayerId, onAttackHit: (opponentId: PlayerId, strength: FighterAttackStrength) => void) {
+    protected constructor(playerId: PlayerId, onAttackHit: (player: PlayerId, opponentId: PlayerId, strength: FighterAttackStrength) => void) {
         this.playerId = playerId
         this.position = { x: STAGE_MID_POINT + STAGE_PADDING + (playerId === 0 ? -FIGHTER_START : FIGHTER_START), y: STAGE_FLOOR }
         this.direction = playerId === 0 ? FighterDirection.RIGHT : FighterDirection.LEFT
         this.onAttackHit = onAttackHit
-
-        this.changeState(FighterState.IDLE)
     }
 
-    changeState(newState: FighterState) {
-        if (newState === this.currentState || !this.states[newState].validFrom.includes(this.currentState)) return
+    setAnimationFrame(frame: number, time: FrameTime) {
+        const animation = this.animations[this.currentState]
+
+        this.animationFrame = frame
+
+        if (this.animationFrame >= animation.length) this.animationFrame = 0
+
+        const [frameKey, frameDelay] = animation[this.animationFrame]
+        this.boxes = this.getBoxes(frameKey)
+        this.animationTimer = time.previous + frameDelay * FRAME_TIME
+    }
+
+    changeState(newState: FighterState, time: FrameTime) {
+        if (!this.states[newState].validFrom.includes(this.currentState)) return
 
         this.currentState = newState
-        this.animationFrame = 0
+        this.setAnimationFrame(0, time)
 
         const state = this.states[newState]
 
@@ -245,76 +269,80 @@ export abstract class Fighter {
         this.resetVelocities()
     }
 
-    handleIdleState() {
-        if (control.isUp(this.playerId)) this.changeState(FighterState.JUMP_START)
-        else if (control.isDown(this.playerId)) this.changeState(FighterState.CROUCH_DOWN)
-        else if (control.isForward(this.playerId, this.direction)) this.changeState(FighterState.WALK_FORWARDS)
-        else if (control.isBackward(this.playerId, this.direction)) this.changeState(FighterState.WALK_BACKWARDS)
-        else if (control.isLightPunch(this.playerId)) this.changeState(FighterState.LIGHT_PUNCH)
-        else if (control.isLightKick(this.playerId)) this.changeState(FighterState.LIGHT_KICK)
-        else if (control.isMediumKick(this.playerId)) this.changeState(FighterState.MEDIUM_KICK)
+    handleHurtInit() {
+        this.resetVelocities()
+    }
+
+    handleIdleState(time: FrameTime) {
+        if (control.isUp(this.playerId)) this.changeState(FighterState.JUMP_START, time)
+        else if (control.isDown(this.playerId)) this.changeState(FighterState.CROUCH_DOWN, time)
+        else if (control.isForward(this.playerId, this.direction)) this.changeState(FighterState.WALK_FORWARDS, time)
+        else if (control.isBackward(this.playerId, this.direction)) this.changeState(FighterState.WALK_BACKWARDS, time)
+        else if (control.isLightPunch(this.playerId)) this.changeState(FighterState.LIGHT_PUNCH, time)
+        else if (control.isLightKick(this.playerId)) this.changeState(FighterState.LIGHT_KICK, time)
+        else if (control.isMediumKick(this.playerId)) this.changeState(FighterState.MEDIUM_KICK, time)
 
         const newDirection = this.getDirection()
 
         if (newDirection !== this.direction) {
             this.direction = newDirection
-            this.changeState(FighterState.IDLE_TURN)
+            this.changeState(FighterState.IDLE_TURN, time)
         }
     }
 
-    handleIdleTurnState() {
-        this.handleIdleState()
+    handleIdleTurnState(time: FrameTime) {
+        this.handleIdleState(time)
 
         if (!this.isAnimationCompleted()) {
             return
         }
 
-        this.changeState(FighterState.IDLE)
+        this.changeState(FighterState.IDLE, time)
     }
 
-    handleWalkForwardsState() {
-        if (!control.isForward(this.playerId, this.direction)) this.changeState(FighterState.IDLE)
-        else if (control.isUp(this.playerId)) this.changeState(FighterState.JUMP_START)
-        else if (control.isLightPunch(this.playerId)) this.changeState(FighterState.LIGHT_PUNCH)
-        else if (control.isLightKick(this.playerId)) this.changeState(FighterState.LIGHT_KICK)
-        else if (control.isMediumKick(this.playerId)) this.changeState(FighterState.MEDIUM_KICK)
+    handleWalkForwardsState(time: FrameTime) {
+        if (!control.isForward(this.playerId, this.direction)) this.changeState(FighterState.IDLE, time)
+        else if (control.isUp(this.playerId)) this.changeState(FighterState.JUMP_START, time)
+        else if (control.isLightPunch(this.playerId)) this.changeState(FighterState.LIGHT_PUNCH, time)
+        else if (control.isLightKick(this.playerId)) this.changeState(FighterState.LIGHT_KICK, time)
+        else if (control.isMediumKick(this.playerId)) this.changeState(FighterState.MEDIUM_KICK, time)
 
         this.direction = this.getDirection()
     }
-    handleWalkBackwardsState() {
-        if (!control.isBackward(this.playerId, this.direction)) this.changeState(FighterState.IDLE)
-        else if (control.isUp(this.playerId)) this.changeState(FighterState.JUMP_START)
-        else if (control.isLightPunch(this.playerId)) this.changeState(FighterState.LIGHT_PUNCH)
-        else if (control.isLightKick(this.playerId)) this.changeState(FighterState.LIGHT_KICK)
-        else if (control.isMediumKick(this.playerId)) this.changeState(FighterState.MEDIUM_KICK)
+    handleWalkBackwardsState(time: FrameTime) {
+        if (!control.isBackward(this.playerId, this.direction)) this.changeState(FighterState.IDLE, time)
+        else if (control.isUp(this.playerId)) this.changeState(FighterState.JUMP_START, time)
+        else if (control.isLightPunch(this.playerId)) this.changeState(FighterState.LIGHT_PUNCH, time)
+        else if (control.isLightKick(this.playerId)) this.changeState(FighterState.LIGHT_KICK, time)
+        else if (control.isMediumKick(this.playerId)) this.changeState(FighterState.MEDIUM_KICK, time)
 
         this.direction = this.getDirection()
     }
 
-    handleJumpStartState() {
+    handleJumpStartState(time: FrameTime) {
         if (this.isAnimationCompleted()) {
             if (control.isBackward(this.playerId, this.direction)) {
-                this.changeState(FighterState.JUMP_BACKWARDS)
+                this.changeState(FighterState.JUMP_BACKWARDS, time)
             } else if (control.isForward(this.playerId, this.direction)) {
-                this.changeState(FighterState.JUMP_FORWARDS)
+                this.changeState(FighterState.JUMP_FORWARDS, time)
             } else {
-                this.changeState(FighterState.JUMP_UP)
+                this.changeState(FighterState.JUMP_UP, time)
             }
         }
     }
 
-    handleJumpState(_context: CanvasRenderingContext2D, time: FrameTime) {
+    handleJumpState(time: FrameTime) {
         this.velocity.y += this.gravity * time.secondsPassed
 
         if (this.position.y > STAGE_FLOOR) {
             this.position.y = STAGE_FLOOR
             if (this.currentState === FighterState.JUMP_FORWARDS || this.currentState === FighterState.JUMP_BACKWARDS)
-                this.changeState(FighterState.JUMP_ROLL_LAND)
-            else this.changeState(FighterState.JUMP_LAND)
+                this.changeState(FighterState.JUMP_ROLL_LAND, time)
+            else this.changeState(FighterState.JUMP_LAND, time)
         }
     }
 
-    handleJumpLandState() {
+    handleJumpLandState(time: FrameTime) {
         if (this.animationFrame < 1) return
 
         let newState = FighterState.IDLE
@@ -322,7 +350,7 @@ export abstract class Fighter {
         if (!control.isIdle(this.playerId)) {
             this.direction = this.getDirection()
 
-            this.handleIdleState()
+            this.handleIdleState(time)
         } else {
             const newDirection = this.getDirection()
 
@@ -336,63 +364,80 @@ export abstract class Fighter {
             }
         }
 
-        this.changeState(newState)
+        this.changeState(newState, time)
     }
 
-    handleCrouchState() {
-        if (!control.isDown(this.playerId)) this.changeState(FighterState.CROUCH_UP)
+    handleCrouchState(time: FrameTime) {
+        if (!control.isDown(this.playerId)) this.changeState(FighterState.CROUCH_UP, time)
 
         const newDirection = this.getDirection()
 
         if (newDirection !== this.direction) {
             this.direction = newDirection
-            this.changeState(FighterState.IDLE_TURN)
+            this.changeState(FighterState.IDLE_TURN, time)
         }
     }
 
-    handleCrouchUpState() {
+    handleCrouchUpState(time: FrameTime) {
         if (this.isAnimationCompleted()) {
-            this.changeState(FighterState.IDLE)
+            this.changeState(FighterState.IDLE, time)
         }
     }
-    handleCrouchDownState() {
+    handleCrouchDownState(time: FrameTime) {
         if (this.isAnimationCompleted()) {
-            this.changeState(FighterState.CROUCH)
+            this.changeState(FighterState.CROUCH, time)
         }
     }
 
-    handleCrouchTurnState() {
-        this.handleCrouchState()
+    handleCrouchTurnState(time: FrameTime) {
+        this.handleCrouchState(time)
 
         if (!this.isAnimationCompleted()) return
-        this.changeState(FighterState.CROUCH)
+        this.changeState(FighterState.CROUCH, time)
     }
 
-    handleLightPunchState() {
+    handleLightAttackReset(time: FrameTime) {
+        this.setAnimationFrame(0, time)
+        this.resetVelocities()
+        this.attackStroke = false
+    }
+
+    handleLightPunchState(time: FrameTime) {
         const animationsLength = this.animations[FighterState.LIGHT_PUNCH].length - 1
         if (this.animationFrame < animationsLength) return
-        if (control.isLightPunch(this.playerId)) this.animationFrame = 0
+        if (control.isLightPunch(this.playerId)) this.handleLightAttackReset(time)
 
         if (!this.isAnimationCompleted()) return
 
-        this.changeState(FighterState.IDLE)
+        this.changeState(FighterState.IDLE, time)
     }
 
-    handleLightKickState() {
+    handleLightKickState(time: FrameTime) {
         const animationsLength = this.animations[FighterState.LIGHT_KICK].length - 1
 
         if (this.animationFrame < animationsLength) return
-        if (control.isLightKick(this.playerId)) this.animationFrame = 0
+        if (control.isLightKick(this.playerId)) this.handleLightAttackReset(time)
 
         if (!this.isAnimationCompleted()) return
 
-        this.changeState(FighterState.IDLE)
+        this.changeState(FighterState.IDLE, time)
     }
 
-    handleMediumKickState() {
+    handleMediumKickState(time: FrameTime) {
         if (!this.isAnimationCompleted()) return
 
-        this.changeState(FighterState.IDLE)
+        this.changeState(FighterState.IDLE, time)
+    }
+
+    handleHurtState(time: FrameTime) {
+        if (!this.isAnimationCompleted()) return
+
+        this.changeState(FighterState.IDLE, time)
+    }
+
+    handleAttackHit(strength: FighterAttackStrength, hitLocation: string, time: FrameTime) {
+        const newState = this.getHitState(strength, hitLocation) as FighterState
+        this.changeState(newState, time)
     }
 
     hasCollideWithOpponent() {
@@ -437,8 +482,20 @@ export abstract class Fighter {
 
         return {
             push: { x: pushX, y: pushY, width: pushWidth, height: pushHeight },
-            hurt: [head, body, feet],
+            hurt: {
+                [FighterHurtBox.HEAD]: head,
+                [FighterHurtBox.BODY]: body,
+                [FighterHurtBox.FEET]: feet,
+            },
             hit: { x: hitX, y: hitY, width: hitWidth, height: hitHeight },
+        }
+    }
+
+    getHitState(strength: FighterAttackStrength, hitLocation: string) {
+        switch (strength) {
+            case FighterAttackStrength.LIGHT:
+                if (hitLocation === FighterHurtBox.HEAD) return FighterState.HURT_HEAD_LIGHT
+                return FighterState.HURT_BODY_LIGHT
         }
     }
 
@@ -484,20 +541,22 @@ export abstract class Fighter {
         }
     }
 
-    updateAttackBoxCollided() {
+    updateAttackBoxCollided(time: FrameTime) {
         if (!this.states[this.currentState].attackType || this.attackStroke) return
 
         const actualHitBox = getActualBoxDimensions(this.position, this.direction, this.boxes.hit)
 
-        for (const hurt of this.opponent.boxes.hurt) {
-            const [x, y, width, height] = hurt
+        for (const [hurtLocation, hurtBox] of Object.entries(this.opponent.boxes.hurt)) {
+            const [x, y, width, height] = hurtBox
             const actualOpponentHurtBox = getActualBoxDimensions(this.opponent.position, this.opponent.direction, { x, y, width, height })
 
-            if (!boxOverlap(actualHitBox, actualOpponentHurtBox)) return
-
+            if (!boxOverlap(actualHitBox, actualOpponentHurtBox)) continue
             const strength = this.states[this.currentState].attackStrength as FighterAttackStrength
 
-            this.onAttackHit(this.opponent.playerId, strength)
+            this.onAttackHit(this.playerId, this.opponent.playerId, strength)
+
+            this.opponent.handleAttackHit(strength, hurtLocation, time)
+
             this.attackStroke = true
             return
         }
@@ -505,19 +564,10 @@ export abstract class Fighter {
 
     updateAnimation(time: FrameTime) {
         const animation = this.animations[this.currentState]
-        const [, frameDelay] = animation[this.animationFrame]
 
-        if (time.previous <= this.animationTimer + (frameDelay as number) * FRAME_TIME) return
+        if (animation[this.animationFrame][1] <= FrameDelay.FREEZE || time.previous <= this.animationTimer) return
 
-        this.animationTimer = time.previous
-
-        if (frameDelay <= FrameDelay.FREEZE) return
-
-        this.animationFrame++
-
-        if (this.animationFrame >= animation.length) this.animationFrame = 0
-
-        this.boxes = this.getBoxes(animation[this.animationFrame][0])
+        this.setAnimationFrame(this.animationFrame + 1, time)
     }
 
     update(context: CanvasRenderingContext2D, time: FrameTime, camera: Camera) {
@@ -526,10 +576,10 @@ export abstract class Fighter {
 
         const state = this.states[this.currentState]
 
-        if (state.update) state.update(context, time)
+        if (state.update) state.update(time)
         this.updateAnimation(time)
         this.updateStageContraints(context, time, camera)
-        this.updateAttackBoxCollided()
+        this.updateAttackBoxCollided(time)
     }
 
     draw(context: CanvasRenderingContext2D, camera: Camera) {
@@ -585,7 +635,7 @@ export abstract class Fighter {
 
         this.drawDebugBox(context, camera, Object.values(push), '#55FF55')
 
-        for (const hurtBox of hurt) {
+        for (const hurtBox of Object.values(hurt)) {
             this.drawDebugBox(context, camera, hurtBox, '#7777FF')
         }
 

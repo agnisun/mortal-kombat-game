@@ -1,4 +1,4 @@
-import { FighterAttackStrength } from '@ts/enums/fighter'
+import { FighterAttackStrength, FighterState } from '@ts/enums/fighter'
 
 export const PUSH_FRICTION = 66
 export const FIGHTER_START = 90
@@ -21,3 +21,17 @@ export const FighterAttackBaseData = {
         damage: 20,
     },
 }
+
+export const hurtStateValidFrom = [
+    FighterState.IDLE,
+    FighterState.WALK_BACKWARDS,
+    FighterState.WALK_FORWARDS,
+    FighterState.JUMP_LAND,
+    FighterState.JUMP_START,
+    FighterState.IDLE_TURN,
+    FighterState.LIGHT_KICK,
+    FighterState.LIGHT_PUNCH,
+    FighterState.MEDIUM_KICK,
+    FighterState.HURT_BODY_LIGHT,
+    FighterState.HURT_HEAD_LIGHT,
+]
