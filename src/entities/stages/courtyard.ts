@@ -23,22 +23,26 @@ export class CourtyardStage {
             ['monks-6', [1344, 718, 625, 41]],
         ],
         [
-            ['monks-1', 144],
-            ['monks-2', 144],
-            ['monks-3', 144],
-            ['monks-4', 144],
-            ['monks-5', 144],
-            ['monks-6', 144],
+            ['monks-1', 9],
+            ['monks-2', 9],
+            ['monks-3', 9],
+            ['monks-4', 9],
+            ['monks-5', 9],
+            ['monks-6', 9],
         ]
     )
     music = document.querySelector('audio#theme-courtyard') as HTMLAudioElement
+    musicStart = true
 
-    constructor() {
+    playMusic() {
         this.music.volume = 0.2
         this.music.play()
+        this.musicStart = false
     }
 
     update(time: FrameTime) {
+        if (this.musicStart) this.playMusic()
+
         this.monks.update(time)
     }
 

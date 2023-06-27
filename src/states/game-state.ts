@@ -1,10 +1,8 @@
 import { GameState } from '@ts/types/game'
-import { createDefaultFighterState } from './fighter-state'
-import { FighterId } from '@ts/enums/fighter'
-
-const fighter1 = createDefaultFighterState(FighterId.RAIDEN)
-const fighter2 = createDefaultFighterState(FighterId['LIU-KANG'])
+import { MenuScene } from '@scenes/menu-scene'
 
 export const gameState: GameState = {
-    fighters: [fighter1, fighter2],
+    fighters: [],
+    currentMenu: 0,
+    currentScene: new MenuScene(),
 }

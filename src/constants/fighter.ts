@@ -18,7 +18,7 @@ export const FighterAttackBaseData = {
         damage: 12,
     },
     [FighterAttackStrength.MEDIUM]: {
-        damage: 20,
+        damage: 24,
     },
 }
 

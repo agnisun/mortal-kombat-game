@@ -5,7 +5,10 @@ import { FighterDirection } from '@ts/enums/fighter'
 const heldKeys = new Set<string>()
 const pressedKeys = new Set<string>()
 
-const mappedKeys = controls.map(({ keyboard }) => Object.values(keyboard)).flat()
+const mappedKeys = controls
+    .map(({ keyboard }) => Object.values(keyboard))
+    .flat()
+    .concat('Enter')
 
 function handleKeyDown(event: KeyboardEvent) {
     if (!mappedKeys.includes(event.code)) return
@@ -26,7 +29,7 @@ export function registerKeyboardEvents() {
     window.addEventListener('keyup', handleKeyUp)
 }
 
-const isKeyDown = (code: string) => heldKeys.has(code)
+export const isKeyDown = (code: string) => heldKeys.has(code)
 export const isKeyUp = (code: string) => !heldKeys.has(code)
 export function isKeyPressed(code: string) {
     if (heldKeys.has(code) && !pressedKeys.has(code)) {
@@ -37,8 +40,8 @@ export function isKeyPressed(code: string) {
     return false
 }
 
-const isLeft = (id: number) => isKeyDown(controls[id].keyboard[Control.LEFT])
-const isRight = (id: number) => isKeyDown(controls[id].keyboard[Control.RIGHT])
+export const isLeft = (id: number) => isKeyDown(controls[id].keyboard[Control.LEFT])
+export const isRight = (id: number) => isKeyDown(controls[id].keyboard[Control.RIGHT])
 export const isUp = (id: number) => isKeyDown(controls[id].keyboard[Control.UP])
 export const isDown = (id: number) => isKeyDown(controls[id].keyboard[Control.DOWN])
 

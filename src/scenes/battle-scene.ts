@@ -5,6 +5,7 @@ import { LiuKang } from '@entities/fighters/liu-kang'
 import { Raiden } from '@entities/fighters/raiden'
 import { StatusBar } from '@entities/overlays/status-bar'
 import { CourtyardStage } from '@entities/stages/courtyard'
+import { Fade } from '@entities/stages/shared/fade'
 import { FighterGameState } from '@states/fighter-state'
 import { gameState } from '@states/game-state'
 import { FighterAttackStrength, FighterId } from '@ts/enums/fighter'
@@ -18,6 +19,7 @@ export class BattleScene {
     stage: CourtyardStage
     overlays: [StatusBar]
     fighterDrawOrder = [0, 1]
+    fade = new Fade()
 
     constructor() {
         this.stage = new CourtyardStage()
@@ -76,10 +78,13 @@ export class BattleScene {
     }
 
     update(context: CanvasRenderingContext2D, time: FrameTime) {
-        this.updateFighters(context, time)
-        this.stage.update(time)
-        this.camera.update(context, time)
-        this.updateOverlays(context, time)
+        if (!this.fade.fadeIn) this.fade.update(time)
+        else {
+            this.updateFighters(context, time)
+            this.stage.update(time)
+            this.camera.update(context, time)
+            this.updateOverlays(context, time)
+        }
     }
 
     drawFighters(context: CanvasRenderingContext2D) {
@@ -98,5 +103,7 @@ export class BattleScene {
         this.stage.draw(context, this.camera)
         this.drawFighters(context)
         this.drawOverlays(context)
+
+        this.fade.draw(context)
     }
 }

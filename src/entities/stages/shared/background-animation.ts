@@ -1,10 +1,11 @@
+import { FRAME_TIME } from '@constants/game'
 import { FrameTime } from '@ts/types/frame'
 
 export class BackgroundAnimation {
     image: HTMLImageElement
     frames: Map<string, number[]>
     animation: [string, number][]
-    animationTimer: number
+    animationTimer = 0
     animationFrame: number
     frameDelay: number
 
@@ -12,13 +13,12 @@ export class BackgroundAnimation {
         this.image = image
         this.frames = new Map(frames)
         this.animation = animation
-        this.animationTimer = 0
         this.animationFrame = startFrame
         this.frameDelay = animation[this.animationFrame][1]
     }
 
     update(time: FrameTime) {
-        if (time.previous > this.animationTimer + this.frameDelay) {
+        if (time.previous > this.animationTimer + this.frameDelay * FRAME_TIME) {
             this.animationFrame += 1
 
             if (this.animationFrame >= this.animation.length) {
