@@ -1,7 +1,7 @@
 {
   "name": "mortal-kombat",
   "homepage": "https://agnisun.github,io/mortal-kombat-game",
-  "private": true,
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
