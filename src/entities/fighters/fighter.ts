@@ -3,13 +3,13 @@ import { STAGE_MID_POINT, STAGE_PADDING, STAGE_FLOOR } from '@constants/stage'
 import { Camera } from '@entities/camera/camera'
 import { FighterState, FighterDirection, FighterAttack, FighterId, FighterAttackStrength, FighterHurtBox } from '@ts/enums/fighter'
 import { FrameDelay } from '@ts/enums/frame'
-import { Position, PlayerId } from '@ts/types'
+import { Position } from '@ts/types'
 import { InitialVelocity, FighterStates, FighterAnimations, VelocityX, FighterBoxes } from '@ts/types/fighter'
 import { FrameTime } from '@ts/types/frame'
 import { boxOverlap, getActualBoxDimensions, rectsOverlap } from '@utils/collisions'
 import * as control from '@handlers/input-register'
 import { FRAME_TIME } from '@constants/game'
-import { gameState } from '@states/game-state'
+import { PlayerId } from '@ts/enums'
 
 export abstract class Fighter {
     image: HTMLImageElement = new Image()
@@ -446,16 +446,6 @@ export abstract class Fighter {
 
     handleHurtState(time: FrameTime) {
         if (!this.isAnimationCompleted()) return
-
-        for (const fighter of gameState.fighters) {
-            if (fighter.playerId === this.playerId) {
-                if (fighter.healthPoints === 0) {
-                    this.changeState(FighterState.LOSE, time)
-                    this.opponent.changeState(FighterState.WIN, time)
-                    return
-                }
-            }
-        }
 
         this.changeState(FighterState.IDLE, time)
     }

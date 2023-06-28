@@ -1,6 +1,6 @@
 import { HEALTH_MAX } from '@constants/fighter'
 import { FighterId } from '@ts/enums/fighter'
-import { PlayerId } from '@ts/types'
+import { PlayerId } from '@ts/enums'
 
 export interface FighterGameState {
     id: FighterId

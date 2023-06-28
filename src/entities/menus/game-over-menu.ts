@@ -14,6 +14,7 @@ export class GameOverMenu {
         else {
             if (control.isKeyPressed('Enter')) {
                 gameState.currentMenu = MenusId.HEROES
+                gameState.fighters = []
             }
         }
     }

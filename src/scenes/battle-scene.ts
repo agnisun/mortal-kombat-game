@@ -9,7 +9,7 @@ import { CourtyardStage } from '@entities/stages/courtyard'
 import { Fade } from '@entities/stages/shared/fade'
 import { FighterGameState } from '@states/fighter-state'
 import { gameState, getLoser, getWinner } from '@states/game-state'
-import { FighterAttackStrength, FighterId } from '@ts/enums/fighter'
+import { FighterAttackStrength, FighterId, FighterState } from '@ts/enums/fighter'
 import { MenusId, PlayerId } from '@ts/enums'
 import { FighterHero } from '@ts/types/fighter'
 import { FrameTime } from '@ts/types/frame'
@@ -19,7 +19,8 @@ export class BattleScene {
     fighters!: [FighterHero, FighterHero]
     camera!: Camera
     stage: CourtyardStage
-    overlays: [StatusBar, BattleInfo] = [new StatusBar(), new BattleInfo()]
+    overlays: [StatusBar] = [new StatusBar()]
+    battleInfo = new BattleInfo()
     fighterDrawOrder = [0, 1]
     fade = new Fade()
     timer = 0
@@ -67,7 +68,9 @@ export class BattleScene {
         this.camera = new Camera({ x: STAGE_MID_POINT + STAGE_PADDING - 160, y: 16 }, this.fighters)
     }
 
-    restartRound() {
+    restartRound(time: FrameTime) {
+        if (time.previous < this.timer + 5000) return
+
         const winner = getWinner()
         const loser = getLoser()
 
@@ -86,9 +89,32 @@ export class BattleScene {
             this.startRound()
             this.fade.restart()
             this.overlays[0] = new StatusBar()
-            this.overlays[1] = new BattleInfo()
+            this.battleInfo = new BattleInfo()
             this.stage = new CourtyardStage()
             this.timer = 0
+        }
+    }
+
+    restartOverlays(winner: FighterGameState, time: FrameTime) {
+        if (this.timer !== 0) return
+
+        this.timer = time.previous
+
+        winner.rounds += 1
+        const finishTime = this.overlays[0].time
+
+        this.overlays[0] = new StatusBar()
+        this.overlays[0].time = finishTime
+        this.overlays[0].timeTimer = Infinity
+    }
+
+    updateFighterWinner(winner: FighterGameState, time: FrameTime) {
+        for (const fighter of this.fighters) {
+            if (fighter.playerId === winner.playerId) {
+                fighter.changeState(FighterState.WIN, time)
+                fighter.opponent.changeState(FighterState.LOSE, time)
+                return
+            }
         }
     }
 
@@ -96,19 +122,20 @@ export class BattleScene {
         const winner = getWinner()
 
         if (winner) {
-            if (this.timer === 0) {
-                this.timer = time.previous
+            this.updateFighterWinner(winner, time)
+            this.restartOverlays(winner, time)
+            this.restartRound(time)
+        } else if (this.overlays[0].time === 0) {
+            const [fighter1, fighter2] = gameState.fighters
 
-                winner.rounds += 1
-                const finishTime = this.overlays[0].time
-
-                this.overlays[0] = new StatusBar()
-                this.overlays[0].time = finishTime
-                this.overlays[0].timeTimer = Infinity
-            }
-
-            if (time.previous > this.timer + 5000) {
-                this.restartRound()
+            if (fighter1.healthPoints > fighter2.healthPoints) {
+                fighter2.healthPoints = 0
+                this.restartOverlays(fighter1, time)
+                this.restartRound(time)
+            } else if (fighter1.healthPoints < fighter2.healthPoints) {
+                fighter1.healthPoints = 0
+                this.restartOverlays(fighter2, time)
+                this.restartRound(time)
             }
         }
 
@@ -126,13 +153,14 @@ export class BattleScene {
     update(context: CanvasRenderingContext2D, time: FrameTime) {
         if (!this.fade.fadeIn) this.fade.update()
         else {
-            if (this.overlays[1].drawControl.fight && this.overlays[1].drawControl.round) {
+            if (this.battleInfo.drawControl.fight && this.battleInfo.drawControl.round) {
                 this.updateFighters(context, time)
                 this.camera.update(context, time)
                 this.updateOverlays(context, time)
                 this.stage.update(time)
+                this.battleInfo.update(context, time)
             } else {
-                this.updateOverlays(context, time)
+                this.battleInfo.update(context, time)
             }
         }
     }
@@ -153,6 +181,7 @@ export class BattleScene {
         this.stage.draw(context, this.camera)
         this.drawFighters(context)
         this.drawOverlays(context)
+        this.battleInfo.draw(context)
 
         this.fade.draw(context)
     }
