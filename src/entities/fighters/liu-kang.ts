@@ -742,6 +742,29 @@ export class LiuKang extends Fighter {
                     ],
                 ],
             ],
+
+            ['win-1', [[1203, 147, 37, 102], [18, 99], PushBox.IDLE, []]],
+            ['win-2', [[1250, 147, 74, 103], [37, 100], PushBox.IDLE, []]],
+            ['win-3', [[1332, 150, 54, 99], [27, 96], PushBox.IDLE, []]],
+            ['win-4', [[1396, 150, 34, 99], [17, 96], PushBox.IDLE, []]],
+            ['win-5', [[1441, 151, 34, 98], [17, 95], PushBox.IDLE, []]],
+            ['win-6', [[1485, 147, 36, 102], [18, 99], PushBox.IDLE, []]],
+            ['win-7', [[1532, 147, 74, 101], [37, 98], PushBox.IDLE, []]],
+            ['win-8', [[1616, 141, 71, 108], [35, 105], PushBox.IDLE, []]],
+            ['win-9', [[1695, 128, 34, 121], [17, 118], PushBox.IDLE, []]],
+            ['win-10', [[1740, 133, 34, 116], [17, 113], PushBox.IDLE, []]],
+            ['win-11', [[1785, 144, 34, 105], [17, 102], PushBox.IDLE, []]],
+            ['win-12', [[1832, 148, 34, 101], [17, 98], PushBox.IDLE, []]],
+            ['win-13', [[1877, 153, 34, 96], [17, 93], PushBox.IDLE, []]],
+
+            ['lose-1', [[18, 972, 70, 107], [35, 104], PushBox.IDLE, []]],
+            ['lose-2', [[99, 987, 74, 92], [37, 89], PushBox.IDLE, []]],
+            ['lose-3', [[183, 1018, 62, 61], [31, 58], PushBox.IDLE, []]],
+            ['lose-4', [[255, 1021, 50, 58], [25, 55], PushBox.IDLE, []]],
+            ['lose-5', [[316, 1009, 53, 70], [26, 67], PushBox.IDLE, []]],
+            ['lose-6', [[379, 1017, 46, 62], [23, 59], PushBox.IDLE, []]],
+            ['lose-7', [[437, 1035, 71, 44], [35, 41], PushBox.IDLE, []]],
+            ['lose-8', [[519, 1051, 79, 28], [39, 25], PushBox.IDLE, []]],
         ])
 
         this.animations[FighterState.IDLE] = [
@@ -880,6 +903,33 @@ export class LiuKang extends Fighter {
             ['hurt-body-light-2', 6],
             ['hurt-body-light-3', 6],
             ['hurt-body-light-3', FrameDelay.TRANSITION],
+        ]
+        this.animations[FighterState.WIN] = [
+            ['win-1', 6],
+            ['win-2', 6],
+            ['win-3', 6],
+            ['win-4', 6],
+            ['win-5', 6],
+            ['win-6', 6],
+            ['win-7', 6],
+            ['win-8', 6],
+            ['win-9', 6],
+            ['win-10', 6],
+            ['win-11', 6],
+            ['win-12', 6],
+            ['win-13', 6],
+            ['win-13', FrameDelay.TRANSITION],
+        ]
+        this.animations[FighterState.LOSE] = [
+            ['lose-1', 6],
+            ['lose-2', 6],
+            ['lose-3', 6],
+            ['lose-4', 6],
+            ['lose-5', 6],
+            ['lose-6', 6],
+            ['lose-7', 6],
+            ['lose-8', 6],
+            ['lose-8', FrameDelay.TRANSITION],
         ]
     }
 

@@ -4,8 +4,9 @@ import { drawFrame } from '@utils/context'
 import * as control from '@handlers/input-register'
 import { gameState } from '@states/game-state'
 import { Fade } from '@entities/stages/shared/fade'
+import { MenusId } from '@ts/enums'
 
-export class MainMenu extends Fade {
+export class MainMenu {
     image = document.querySelector('img[alt="main-menu"]') as HTMLImageElement
     frames: Map<string, number[]> = new Map([
         ['background', [1056, 178, 320, 240]],
@@ -24,12 +25,13 @@ export class MainMenu extends Fade {
             ['start-button-2', 24],
         ]
     )
+    fade = new Fade()
 
     update(time: FrameTime) {
-        if (!this.fadeIn) super.update(time)
+        if (!this.fade.fadeIn) this.fade.update()
         else {
             if (control.isKeyPressed('Enter')) {
-                gameState.currentMenu = 1
+                gameState.currentMenu = MenusId.HEROES
             }
 
             this.startButton.update(time)
@@ -47,6 +49,6 @@ export class MainMenu extends Fade {
         this.drawFrame(context, 'tablet', Math.floor(context.canvas.width / 2 - 113), 133)
         this.startButton.draw(context, Math.floor(context.canvas.width / 2 - 42.5), 150)
 
-        super.draw(context)
+        this.fade.draw(context)
     }
 }

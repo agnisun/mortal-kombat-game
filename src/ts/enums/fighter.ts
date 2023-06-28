@@ -33,6 +33,8 @@ export enum FighterState {
     MEDIUM_KICK = 'mediumKick',
     HURT_HEAD_LIGHT = 'hurtHeadLight',
     HURT_BODY_LIGHT = 'hurtBodyLight',
+    WIN = 'win',
+    LOSE = 'lose',
 }
 
 export enum FighterHurtBox {

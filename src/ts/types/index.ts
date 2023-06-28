@@ -6,9 +6,4 @@ export interface Position {
     y: number
 }
 
-export enum PlayerId {
-    FIRST = 0,
-    SECOND = 1,
-}
-
 export type Scenes = MenuScene | BattleScene

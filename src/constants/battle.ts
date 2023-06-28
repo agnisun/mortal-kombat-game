@@ -1,3 +1,3 @@
 import { FRAME_TIME } from './game'
 
-export const TIME_DELAY = 60 * FRAME_TIME
+export const TIME_DELAY = 50 * FRAME_TIME

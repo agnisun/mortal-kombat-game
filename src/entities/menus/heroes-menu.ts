@@ -3,14 +3,14 @@ import { FighterId } from '@ts/enums/fighter'
 import { FrameTime } from '@ts/types/frame'
 import { drawFrame } from '@utils/context'
 import * as control from '@handlers/input-register'
-import { PlayerId } from '@ts/types'
+import { PlayerId } from '@ts/enums'
 import { Control } from '@ts/enums/control'
 import { Fade } from '@entities/stages/shared/fade'
 import { gameState } from '@states/game-state'
 import { createDefaultFighterState } from '@states/fighter-state'
 import { BattleScene } from '@scenes/battle-scene'
 
-export class HeroesMenu extends Fade {
+export class HeroesMenu {
     image = document.querySelector('img[alt="main-menu"]') as HTMLImageElement
     frames: Map<string, number[]> = new Map([
         ['text', [574, 714, 156, 14]],
@@ -48,6 +48,7 @@ export class HeroesMenu extends Fade {
             ['player-two-2', 11],
         ]
     )
+    fade = new Fade()
 
     handlePrevFighter(currentPlayer: number) {
         if (currentPlayer > 0) return currentPlayer - 1
@@ -66,7 +67,7 @@ export class HeroesMenu extends Fade {
             } else if (control.isControlPressed(PlayerId.FIRST, Control.RIGHT)) {
                 this.playerOneFighter = this.handleNextFighter(this.playerOneFighter)
             } else if (control.isKeyPressed('Enter')) {
-                gameState.fighters[0] = createDefaultFighterState(this.fighters[this.playerOneFighter].id)
+                gameState.fighters[0] = createDefaultFighterState(this.fighters[this.playerOneFighter].id, PlayerId.FIRST)
             }
         } else {
             if (control.isControlPressed(PlayerId.SECOND, Control.LEFT)) {
@@ -74,14 +75,17 @@ export class HeroesMenu extends Fade {
             } else if (control.isControlPressed(PlayerId.SECOND, Control.RIGHT)) {
                 this.playerTwoFighter = this.handleNextFighter(this.playerTwoFighter)
             } else if (control.isKeyPressed('Enter')) {
-                gameState.fighters[1] = createDefaultFighterState(this.fighters[this.playerTwoFighter].id)
+                gameState.fighters[1] = createDefaultFighterState(this.fighters[this.playerTwoFighter].id, PlayerId.SECOND)
                 gameState.currentScene = new BattleScene()
+
+                const mainTheme = document.querySelector('audio#main-theme') as HTMLAudioElement
+                mainTheme.pause()
             }
         }
     }
 
     update(time: FrameTime) {
-        if (!this.fadeIn) super.update(time)
+        if (!this.fade.fadeIn) this.fade.update()
         else {
             this.updatePlayerFighter()
 
@@ -113,6 +117,6 @@ export class HeroesMenu extends Fade {
         this.drawFighters(context)
         this.drawFightersSelected(context)
 
-        super.draw(context)
+        this.fade.draw(context)
     }
 }

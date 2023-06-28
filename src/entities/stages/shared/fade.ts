@@ -1,6 +1,3 @@
-import { FRAME_TIME } from '@constants/game'
-import { FrameTime } from '@ts/types/frame'
-
 export class Fade {
     animationTimer = 0
     animationFrame = 0
@@ -8,14 +5,17 @@ export class Fade {
     alpha = 1
     fadeIn = false
 
-    update(time: FrameTime) {
-        if (time.previous > this.animationTimer + this.frameDelay * FRAME_TIME) {
-            if (!this.fadeIn) {
-                this.alpha -= 0.01
-                if (this.alpha < 0) {
-                    this.alpha = 0
-                    this.fadeIn = true
-                }
+    restart() {
+        this.alpha = 1
+        this.fadeIn = false
+    }
+
+    update() {
+        if (!this.fadeIn) {
+            this.alpha -= 0.01
+            if (this.alpha < 0) {
+                this.alpha = 0
+                this.fadeIn = true
             }
         }
     }

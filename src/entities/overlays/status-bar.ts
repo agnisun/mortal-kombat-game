@@ -1,7 +1,8 @@
 import { TIME_DELAY } from '@constants/battle'
 import { HEALTH_MAX } from '@constants/fighter'
 import { gameState } from '@states/game-state'
-import { FighterDirection, FighterId } from '@ts/enums/fighter'
+import { FighterDirection } from '@ts/enums/fighter'
+import { PlayerId } from '@ts/enums'
 import { FrameTime } from '@ts/types/frame'
 import { drawFrame } from '@utils/context'
 
@@ -32,9 +33,9 @@ export class StatusBar {
         ['time-9', [5851, 34, 8, 16]],
     ])
     names: string[]
-    healthPoints: Map<FighterId, number> = new Map([
-        [gameState.fighters[0].id, gameState.fighters[0].healthPoints],
-        [gameState.fighters[1].id, gameState.fighters[1].healthPoints],
+    healthPoints: Map<PlayerId, number> = new Map([
+        [gameState.fighters[0].playerId, gameState.fighters[0].healthPoints],
+        [gameState.fighters[1].playerId, gameState.fighters[1].healthPoints],
     ])
 
     constructor() {
@@ -54,10 +55,10 @@ export class StatusBar {
 
     updateHealthBar(time: FrameTime) {
         for (const figther of gameState.fighters) {
-            const uiHealthPoints = this.healthPoints.get(figther.id) as number
+            const uiHealthPoints = this.healthPoints.get(figther.playerId) as number
 
             if (figther.healthPoints < uiHealthPoints) {
-                this.healthPoints.set(figther.id, Math.max(0, uiHealthPoints - time.secondsPassed * 60))
+                this.healthPoints.set(figther.playerId, Math.max(0, uiHealthPoints - time.secondsPassed * 60))
             }
         }
     }

@@ -742,6 +742,18 @@ export class Raiden extends Fighter {
                     ],
                 ],
             ],
+            ['win-1', [[20, 284, 48, 97], [24, 94], PushBox.IDLE, []]],
+            ['win-2', [[80, 287, 49, 94], [24, 91], PushBox.IDLE, []]],
+            ['win-3', [[139, 286, 70, 95], [35, 92], PushBox.IDLE, []]],
+            ['win-4', [[220, 282, 82, 99], [41, 96], PushBox.IDLE, []]],
+            ['win-5', [[313, 259, 48, 122], [24, 119], PushBox.IDLE, []]],
+
+            ['lose-1', [[20, 885, 63, 91], [31, 88], PushBox.IDLE, []]],
+            ['lose-2', [[93, 911, 72, 65], [36, 62], PushBox.IDLE, []]],
+            ['lose-3', [[176, 928, 72, 48], [36, 45], PushBox.IDLE, []]],
+            ['lose-4', [[259, 914, 70, 62], [35, 59], PushBox.IDLE, []]],
+            ['lose-5', [[340, 920, 78, 56], [44, 53], PushBox.IDLE, []]],
+            ['lose-6', [[429, 950, 85, 26], [42, 23], PushBox.IDLE, []]],
         ])
 
         this.animations[FighterState.IDLE] = [
@@ -882,6 +894,24 @@ export class Raiden extends Fighter {
             ['hurt-body-light-2', 4],
             ['hurt-body-light-3', 4],
             ['hurt-body-light-3', FrameDelay.TRANSITION],
+        ]
+        this.animations[FighterState.WIN] = [
+            ['win-1', 6],
+            ['win-2', 6],
+            ['win-3', 6],
+            ['win-4', 6],
+            ['win-5', 6],
+            ['win-5', FrameDelay.TRANSITION],
+        ]
+
+        this.animations[FighterState.LOSE] = [
+            ['lose-1', 6],
+            ['lose-2', 6],
+            ['lose-3', 6],
+            ['lose-4', 6],
+            ['lose-5', 6],
+            ['lose-6', 6],
+            ['lose-6', FrameDelay.TRANSITION],
         ]
     }
 

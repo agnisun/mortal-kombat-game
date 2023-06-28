@@ -32,17 +32,18 @@ export class CourtyardStage {
         ]
     )
     music = document.querySelector('audio#theme-courtyard') as HTMLAudioElement
-    musicStart = true
+
+    constructor() {
+        this.playMusic()
+    }
 
     playMusic() {
         this.music.volume = 0.2
+        this.music.currentTime = 0
         this.music.play()
-        this.musicStart = false
     }
 
     update(time: FrameTime) {
-        if (this.musicStart) this.playMusic()
-
         this.monks.update(time)
     }
 

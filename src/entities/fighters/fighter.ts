@@ -9,6 +9,7 @@ import { FrameTime } from '@ts/types/frame'
 import { boxOverlap, getActualBoxDimensions, rectsOverlap } from '@utils/collisions'
 import * as control from '@handlers/input-register'
 import { FRAME_TIME } from '@constants/game'
+import { gameState } from '@states/game-state'
 
 export abstract class Fighter {
     image: HTMLImageElement = new Image()
@@ -148,6 +149,14 @@ export abstract class Fighter {
             update: this.handleHurtState.bind(this),
             validFrom: hurtStateValidFrom,
         },
+        [FighterState.WIN]: {
+            init: this.handleFinishInit.bind(this),
+            validFrom: hurtStateValidFrom,
+        },
+        [FighterState.LOSE]: {
+            init: this.handleFinishInit.bind(this),
+            validFrom: hurtStateValidFrom,
+        },
     }
     animations: FighterAnimations = {
         idle: [],
@@ -169,6 +178,8 @@ export abstract class Fighter {
         mediumKick: [],
         hurtHeadLight: [],
         hurtBodyLight: [],
+        win: [],
+        lose: [],
     }
     direction: FighterDirection
     playerId: PlayerId
@@ -270,6 +281,10 @@ export abstract class Fighter {
     }
 
     handleHurtInit() {
+        this.resetVelocities()
+    }
+
+    handleFinishInit() {
         this.resetVelocities()
     }
 
@@ -431,6 +446,16 @@ export abstract class Fighter {
 
     handleHurtState(time: FrameTime) {
         if (!this.isAnimationCompleted()) return
+
+        for (const fighter of gameState.fighters) {
+            if (fighter.playerId === this.playerId) {
+                if (fighter.healthPoints === 0) {
+                    this.changeState(FighterState.LOSE, time)
+                    this.opponent.changeState(FighterState.WIN, time)
+                    return
+                }
+            }
+        }
 
         this.changeState(FighterState.IDLE, time)
     }
@@ -599,8 +624,6 @@ export abstract class Fighter {
             height
         )
         context.setTransform(1, 0, 0, 1, 0, 0)
-
-        this.drawDebug(context, camera)
     }
 
     drawDebugBox(context: CanvasRenderingContext2D, camera: Camera, dimensions: number[], baseColor: string) {
