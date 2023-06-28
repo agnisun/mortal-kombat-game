@@ -2,7 +2,7 @@ import { PushBox } from '@constants/fighter'
 import { Camera } from '@entities/camera/camera'
 import { FighterAttackStrength, FighterId, FighterState } from '@ts/enums/fighter'
 import { FrameDelay } from '@ts/enums/frame'
-import { PlayerId } from '@ts/types'
+import { PlayerId } from '@ts/enums'
 import { Fighter } from './fighter'
 
 export class Raiden extends Fighter {
