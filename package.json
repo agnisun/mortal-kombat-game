@@ -11,8 +11,7 @@
     "eslint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "prettier": "prettier --write src/**",
     "linters": "npm run prettier && npm run eslint",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "@types/node": "^20.3.1",
